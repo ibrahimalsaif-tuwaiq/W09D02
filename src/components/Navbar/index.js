@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "./../../reducers/users";
+import { userLogout } from "./../../reducers/users";
 import { IoLogOutOutline } from "react-icons/io5";
 import { MdSpaceDashboard } from "react-icons/md";
 import { AiFillHome } from "react-icons/ai";
@@ -18,7 +18,7 @@ const Navbar = ({ page }) => {
   });
 
   const logout = () => {
-    dispatch(userLogin({ role: "", token: "" }));
+    dispatch(userLogout({ role: "", token: "" }));
     navigate("/login");
   };
 

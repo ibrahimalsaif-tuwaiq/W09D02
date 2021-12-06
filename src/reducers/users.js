@@ -15,7 +15,7 @@ const Users = (state = initialState, action) => {
     case "LOGOUT":
       localStorage.removeItem("token");
       localStorage.removeItem("role");
-      return { user: null, token: "" };
+      return { role: "", token: "" };
     default:
       return state;
   }

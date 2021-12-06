@@ -2,7 +2,7 @@ const initialState = {
   todos: [],
 };
 
-const Todo = (state = initialState, action) => {
+const userTodos = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -14,9 +14,9 @@ const Todo = (state = initialState, action) => {
   }
 };
 
-export default Todo;
+export default userTodos;
 
-export const todosGet = (data) => {
+export const userTodosGet = (data) => {
   return {
     type: "GET",
     payload: data,

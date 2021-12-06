@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { adminUsersGet } from "./../../reducers/admin";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Navbar from "./../Navbar";
@@ -8,11 +9,11 @@ import Navbar from "./../Navbar";
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [users, setUsers] = useState([]);
 
   const state = useSelector((state) => {
     return {
       token: state.Users.token,
+      users: state.adminUsers.users || [],
     };
   });
 
@@ -28,7 +29,7 @@ const Dashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUsers(res.data);
+      dispatch(adminUsersGet({ users: res.data }));
     } catch (error) {
       console.log(error);
     }
@@ -82,9 +83,9 @@ const Dashboard = () => {
           </h1>
         ) : (
           <div className="ItemsCon">
-            {users ? (
+            {state.users ? (
               <ul className="list">
-                {users.map((user) => (
+                {state.users.map((user) => (
                   <div key={user._id} className="listItem">
                     <li>{user.email}</li>
                     <div>

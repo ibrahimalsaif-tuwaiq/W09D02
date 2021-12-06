@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { todosGet } from "./../../reducers/todos";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Navbar from "./../Navbar";
@@ -8,12 +9,12 @@ import "./style.css";
 
 const Todos = () => {
   const dispatch = useDispatch();
-  const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
 
   const state = useSelector((state) => {
     return {
       token: state.Users.token,
+      todos: state.Todo.todos || [],
     };
   });
 
@@ -29,7 +30,7 @@ const Todos = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setTodos(res.data);
+      dispatch(todosGet({ todos: res.data }));
     } catch (error) {
       console.log(error);
     }
@@ -99,11 +100,12 @@ const Todos = () => {
 
   return (
     <>
-      <Navbar page='Todos'/>
+      <Navbar page="Todos" />
       <div className="wrapper">
         {!state.token ? (
           <h1>
-            You are not logeddin yet, so <Link to="/login">login</Link> or <Link to="/signup">signup</Link>
+            You are not logeddin yet, so <Link to="/login">login</Link> or{" "}
+            <Link to="/signup">signup</Link>
           </h1>
         ) : (
           <div className="ItemsCon">
@@ -117,9 +119,9 @@ const Todos = () => {
                 ADD
               </button>
             </div>
-            {todos.length ? (
+            {state.todos.length ? (
               <ul className="list">
-                {todos.map((todo) => (
+                {state.todos.map((todo) => (
                   <div key={todo._id} className="listItem">
                     <li>{todo.name}</li>
                     <div>

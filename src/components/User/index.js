@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { userTodosGet } from "./../../reducers/userTodos";
 import axios from "axios";
 import Navbar from "./../Navbar";
 
 const User = () => {
   const dispatch = useDispatch();
   const { userId } = useParams();
-  const [todos, setTodos] = useState([]);
 
   const state = useSelector((state) => {
     return {
       token: state.Users.token,
+      todos: state.userTodos.todos || [],
     };
   });
 
@@ -30,7 +31,7 @@ const User = () => {
           },
         }
       );
-      setTodos(res.data);
+      dispatch(userTodosGet({ todos: res.data }));
     } catch (error) {
       console.log(error);
     }
@@ -66,9 +67,9 @@ const User = () => {
           </h1>
         ) : (
           <div className="ItemsCon">
-            {todos.length ? (
+            {state.todos.length ? (
               <ul className="list">
-                {todos.map((todo) => (
+                {state.todos.map((todo) => (
                   <div key={todo._id} className="listItem">
                     <li>{todo.name}</li>
                     <div>

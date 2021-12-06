@@ -1,22 +1,22 @@
 const initialState = {
-  todos: [],
+  users: [],
 };
 
-const Todo = (state = initialState, action) => {
+const adminUsers = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
     case "GET":
-      const { todos } = payload;
-      return { todos };
+      const { users } = payload;
+      return { users };
     default:
       return state;
   }
 };
 
-export default Todo;
+export default adminUsers;
 
-export const todosGet = (data) => {
+export const adminUsersGet = (data) => {
   return {
     type: "GET",
     payload: data,

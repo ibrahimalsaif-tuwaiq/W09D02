@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+body {
+  background: rgb(131, 197, 190);
+  background: linear-gradient(
+    117deg,
+    rgba(131, 197, 190, 1) 19%,
+    rgba(234, 255, 253, 1) 100%
+  );
+}
+
+.wrapper {
+  height: calc(100vh - 3rem);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

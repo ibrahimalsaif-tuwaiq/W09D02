@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 const Signup = () => {
@@ -7,13 +8,12 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [token, setToken] = useState("");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setToken(token);
-    // eslint-disable-next-line
-  }, []);
+  const state = useSelector((state) => {
+    return {
+      token: state.Users.token,
+    };
+  });
 
   const signup = async () => {
     try {
@@ -30,7 +30,7 @@ const Signup = () => {
 
   return (
     <div className="wrapper">
-      {!token ? (
+      {!state.token ? (
         <div className="formCon">
           <h1>Signup</h1>
           {message ? <div className="message">{message}</div> : ""}

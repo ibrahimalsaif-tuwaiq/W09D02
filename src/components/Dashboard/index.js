@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Navbar from "./../Navbar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState("");
-  const [role, setRole] = useState("");
+  const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
 
+  const state = useSelector((state) => {
+    return {
+      token: state.Users.token,
+    };
+  });
+
   useEffect(() => {
-    const StorgeToken = localStorage.getItem("token");
-    setToken(StorgeToken);
-    const StorgeRole = localStorage.getItem("role");
-    setRole(StorgeRole);
-    getUsers(StorgeToken);
+    getUsers(state.token);
     // eslint-disable-next-line
   }, []);
 
@@ -47,10 +49,10 @@ const Dashboard = () => {
       if (result.isConfirmed) {
         await axios.delete(`${process.env.REACT_APP_BASE_URL}/users/${id}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${state.token}`,
           },
         });
-        getUsers(token);
+        getUsers(state.token);
         Swal.fire({
           title: "Deleted!",
           text: "The user has been deleted",
@@ -71,9 +73,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <Navbar role={role} page="Dashboard" />
+      <Navbar page="Dashboard" />
       <div className="wrapper">
-        {!token ? (
+        {!state.token ? (
           <h1>
             You are not logeddin yet, so <Link to="/login">login</Link> or
             <Link to="/signup">signup</Link>

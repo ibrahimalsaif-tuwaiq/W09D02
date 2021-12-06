@@ -3,7 +3,7 @@ const initialState = {
   token: "",
 };
 
-const todos = (state = initialState, action) => {
+const Todo = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -15,7 +15,7 @@ const todos = (state = initialState, action) => {
   }
 };
 
-export default todos;
+export default Todo;
 
 export const todosGet = (data) => {
   return {

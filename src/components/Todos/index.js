@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Navbar from "./../Navbar";
 import "./style.css";
 
 const Todos = () => {
-  const [token, setToken] = useState("");
-  const [role, setRole] = useState("");
+  const dispatch = useDispatch();
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
 
+  const state = useSelector((state) => {
+    return {
+      token: state.Users.token,
+    };
+  });
+
   useEffect(() => {
-    const StorgeToken = localStorage.getItem("token");
-    setToken(StorgeToken);
-    const StorgeRole = localStorage.getItem("role");
-    setRole(StorgeRole);
-    getTodos(StorgeToken);
+    getTodos(state.token);
     // eslint-disable-next-line
   }, []);
 
@@ -42,14 +44,14 @@ const Todos = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${state.token}`,
           },
         }
       );
     } catch (error) {
       console.log(error);
     }
-    getTodos(token);
+    getTodos(state.token);
   };
 
   const updateTodo = async (id) => {
@@ -71,11 +73,11 @@ const Todos = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${state.token}`,
             },
           }
         );
-        getTodos(token);
+        getTodos(state.token);
       }
     } catch (error) {
       console.log(error);
@@ -86,10 +88,10 @@ const Todos = () => {
     try {
       await axios.delete(`${process.env.REACT_APP_BASE_URL}/todos/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${state.token}`,
         },
       });
-      getTodos(token);
+      getTodos(state.token);
     } catch (error) {
       console.log(error);
     }
@@ -97,9 +99,9 @@ const Todos = () => {
 
   return (
     <>
-      <Navbar role={role} page='Todos'/>
+      <Navbar page='Todos'/>
       <div className="wrapper">
-        {!token ? (
+        {!state.token ? (
           <h1>
             You are not logeddin yet, so <Link to="/login">login</Link> or <Link to="/signup">signup</Link>
           </h1>

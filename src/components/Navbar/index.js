@@ -1,25 +1,33 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "./../../reducers/users";
 import { IoLogOutOutline } from "react-icons/io5";
 import { MdSpaceDashboard } from "react-icons/md";
 import { AiFillHome } from "react-icons/ai";
 import "./style.css";
 
-const Navbar = ({ role, page }) => {
+const Navbar = ({ page }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const state = useSelector((state) => {
+    return {
+      role: state.Users.role,
+    };
+  });
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    dispatch(userLogin({ role: "", token: "" }));
     navigate("/login");
   };
 
-  return role ? (
+  return state.role ? (
     <div className="navbar">
       {page !== "Todos" && (
         <AiFillHome className="homeLogo" onClick={() => navigate("/")} />
       )}
-      {page === "Todos" && role === "admin" && (
+      {page === "Todos" && state.role === "admin" && (
         <MdSpaceDashboard
           className="dashboardLogo"
           onClick={() => navigate("/dashboard")}

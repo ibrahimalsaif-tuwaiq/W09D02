@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { userLogin } from "./../../reducers/users";
 import "./style.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [token, setToken] = useState("");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setToken(token);
-    // eslint-disable-next-line
-  }, []);
+  const state = useSelector((state) => {
+    return {
+      token: state.Users.token,
+    };
+  });
 
   const login = async () => {
     try {
@@ -22,8 +24,9 @@ const Login = () => {
         email,
         password,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.result.role.role);
+      dispatch(
+        userLogin({ role: res.data.result.role.role, token: res.data.token })
+      );
       navigate("/");
     } catch (error) {
       setMessage(error.response.data.message);
@@ -32,7 +35,7 @@ const Login = () => {
 
   return (
     <div className="wrapper">
-      {!token ? (
+      {!state.token ? (
         <div className="formCon">
           <h1>Login</h1>
           {message ? <div className="message">{message}</div> : ""}

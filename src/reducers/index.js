@@ -1,9 +1,9 @@
 import { createStore, combineReducers } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import users from "./users";
-import todos from "./todos";
+import Users from "./users";
+import Todo from "./todos";
 
-const reducers = combineReducers({ users, todos });
+const reducers = combineReducers({ Users, Todo });
 
 const store = () => {
   return createStore(reducers, composeWithDevTools());

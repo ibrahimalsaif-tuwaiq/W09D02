@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Navbar from "./../Navbar";
 
 const User = () => {
+  const dispatch = useDispatch();
   const { userId } = useParams();
-  const [token, setToken] = useState("");
-  const [role, setRole] = useState("");
   const [todos, setTodos] = useState([]);
 
+  const state = useSelector((state) => {
+    return {
+      token: state.Users.token,
+    };
+  });
+
   useEffect(() => {
-    const StorgeToken = localStorage.getItem("token");
-    setToken(StorgeToken);
-    const StorgeRole = localStorage.getItem("role");
-    setRole(StorgeRole);
-    getUserTodos(StorgeToken);
+    getUserTodos(state.token);
     // eslint-disable-next-line
   }, []);
 
@@ -43,11 +45,11 @@ const User = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${state.token}`,
           },
         }
       );
-      getUserTodos(token);
+      getUserTodos(state.token);
     } catch (error) {
       console.log(error);
     }
@@ -55,9 +57,9 @@ const User = () => {
 
   return (
     <>
-      <Navbar role={role} page="User" />
+      <Navbar page="User" />
       <div className="wrapper">
-        {!token ? (
+        {!state.token ? (
           <h1>
             You are not logeddin yet, so <Link to="/login">login</Link> or
             <Link to="/signup">signup</Link>
